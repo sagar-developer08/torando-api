@@ -78,6 +78,13 @@ exports.addToCart = asyncHandler(async (req, res) => {
     });
   }
 
+  // Update lastActive and reset abandoned status if needed
+  cart.lastActive = new Date();
+  if (cart.isAbandoned) {
+    cart.isAbandoned = false;
+    cart.abandonedAt = undefined;
+  }
+  
   // Calculate total price
   cart.calculateTotalPrice();
   await cart.save();
@@ -127,6 +134,13 @@ exports.updateCartItem = asyncHandler(async (req, res) => {
   // Update quantity
   cart.items[itemIndex].quantity = quantity;
   
+  // Update lastActive and reset abandoned status
+  cart.lastActive = new Date();
+  if (cart.isAbandoned) {
+    cart.isAbandoned = false;
+    cart.abandonedAt = undefined;
+  }
+  
   // Recalculate total price
   cart.calculateTotalPrice();
   await cart.save();
@@ -152,6 +166,13 @@ exports.removeCartItem = asyncHandler(async (req, res) => {
 
   // Remove the item from cart
   cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+  
+  // Update lastActive and reset abandoned status
+  cart.lastActive = new Date();
+  if (cart.isAbandoned) {
+    cart.isAbandoned = false;
+    cart.abandonedAt = undefined;
+  }
   
   // Recalculate total price
   cart.calculateTotalPrice();

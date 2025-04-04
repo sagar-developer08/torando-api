@@ -10,6 +10,9 @@ const connectDB = require('./config/database');
 // const { protect, authorize } = require('./middlewares/authmiddleware');
 // Add errorHandler middleware
 const errorHandler = require('./middlewares/errormiddleware');
+const cron = require('node-cron');
+const { markAbandonedCarts } = require('./controllers/abandonCartController');
+const abandonCartRoutes = require('./routes/abandonCartRoutes');
 
 // Load env vars
 dotenv.config();
@@ -66,6 +69,7 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/faqs', faqRoutes);
 app.use('/api/warranty', warrantyRoutes);
 app.use('/api/cart', cartRoutes); // Mount cart routes
+app.use('/api/admin/carts', abandonCartRoutes);
 
 // Base route
 app.get('/', (req, res) => {
@@ -87,4 +91,24 @@ process.on('unhandledRejection', (err) => {
   console.log(`Error: ${err.message}`);
   // Close server & exit process
   server.close(() => process.exit(1));
+});
+
+// Schedule task to run every day at midnight
+cron.schedule('0 0 * * *', async () => {
+  try {
+    console.log('Running scheduled task: Marking abandoned carts');
+    // Create a mock request and response object
+    const req = { body: { hours: 24 } };
+    const res = {
+      status: () => ({
+        json: (data) => {
+          console.log('Abandoned cart task completed:', data.message);
+        }
+      })
+    };
+    
+    await markAbandonedCarts(req, res);
+  } catch (error) {
+    console.error('Error in abandoned cart scheduled task:', error);
+  }
 });

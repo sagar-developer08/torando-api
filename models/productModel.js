@@ -54,6 +54,15 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    // Add new fields for best seller and new arrivals
+    isBestSeller: {
+      type: Boolean,
+      default: false
+    },
+    isNewArrival: {
+      type: Boolean,
+      default: false
+    },
     isActive: {
       type: Boolean,
       default: true

@@ -26,31 +26,46 @@ const cartItemSchema = new mongoose.Schema({
   }
 });
 
-const cartSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    items: [cartItemSchema],
-    totalPrice: {
-      type: Number,
-      default: 0
-    }
+const cartSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   },
-  {
-    timestamps: true
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      name: String,
+      image: String,
+      price: Number,
+      quantity: {
+        type: Number,
+        default: 1
+      }
+    }
+  ],
+  totalPrice: {
+    type: Number,
+    default: 0
+  },
+  // Add these new fields for abandon cart functionality
+  lastActive: {
+    type: Date,
+    default: Date.now
+  },
+  isAbandoned: {
+    type: Boolean,
+    default: false
+  },
+  abandonedAt: {
+    type: Date
   }
-);
-
-// Method to calculate total price
-cartSchema.methods.calculateTotalPrice = function() {
-  this.totalPrice = this.items.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
-  return this.totalPrice;
-};
+}, {
+  timestamps: true
+});
 
 module.exports = mongoose.model('Cart', cartSchema);

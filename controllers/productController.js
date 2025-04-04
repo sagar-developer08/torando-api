@@ -363,3 +363,82 @@ exports.getFeaturedProducts = async (req, res) => {
     });
   }
 };
+
+// Add these methods to your existing productController.js file
+
+// @desc    Get best seller products
+// @route   GET /api/products/best-sellers
+// @access  Public
+exports.getBestSellerProducts = async (req, res) => {
+  try {
+    // Get limit from query or default to 8
+    const limit = parseInt(req.query.limit) || 8;
+    
+    // Find active best seller products
+    const products = await Product.find({ 
+      isActive: true, 
+      isBestSeller: true 
+    })
+    .populate('category', 'name')
+    .populate('brand', 'name')
+    .limit(limit);
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
+// @desc    Get new arrival products
+// @route   GET /api/products/new-arrivals
+// @access  Public
+exports.getNewArrivalProducts = async (req, res) => {
+  try {
+    // Get limit from query or default to 8
+    const limit = parseInt(req.query.limit) || 8;
+    
+    // Find active new arrival products
+    // Option 1: Using the isNewArrival flag
+    const products = await Product.find({ 
+      isActive: true, 
+      isNewArrival: true 
+    })
+    .populate('category', 'name')
+    .populate('brand', 'name')
+    .limit(limit);
+
+    // Option 2: Alternative approach - get products created in the last 30 days
+    // Uncomment this if you prefer to use creation date instead of a flag
+    /*
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    
+    const products = await Product.find({
+      isActive: true,
+      createdAt: { $gte: thirtyDaysAgo }
+    })
+    .populate('category', 'name')
+    .populate('brand', 'name')
+    .sort('-createdAt')
+    .limit(limit);
+    */
+
+    res.status(200).json({
+      success: true,
+      count: products.length,
+      data: products
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
