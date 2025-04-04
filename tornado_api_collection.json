@@ -1,0 +1,1789 @@
+{
+    "info": {
+      "_postman_id": "a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6",
+      "name": "Tornado Watches API",
+      "description": "API collection for Tornado Watches E-commerce platform",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Auth",
+        "item": [
+          {
+            "name": "Register User",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"phoneNumber\": \"+1234567890\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/users/register",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", "register"]
+              }
+            }
+          },
+          {
+            "name": "Login User",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/users/login",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", "login"]
+              }
+            }
+          },
+          {
+            "name": "Logout User",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/users/logout",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", "logout"]
+              }
+            }
+          },
+          {
+            "name": "Get Current User",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/users/me",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", "me"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Users",
+        "item": [
+          {
+            "name": "Get All Users (Admin)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/users",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users"]
+              }
+            }
+          },
+          {
+            "name": "Get User By ID (Admin)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/users/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "userId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update User Profile",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Updated Name",
+                    "type": "text"
+                  },
+                  {
+                    "key": "email",
+                    "value": "updated@example.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "phoneNumber",
+                    "value": "+9876543210",
+                    "type": "text"
+                  },
+                  {
+                    "key": "avatar",
+                    "type": "file",
+                    "src": "/path/to/avatar.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/users/profile",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", "profile"]
+              }
+            }
+          },
+          {
+            "name": "Update User (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"Updated User\",\n    \"email\": \"updated@example.com\",\n    \"role\": \"admin\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/users/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "userId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete User (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/users/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "users", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "userId"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Products",
+        "item": [
+          {
+            "name": "Get All Products",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/products?sort=-createdAt&limit=10&page=1&category=categoryId&search=watch",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products"],
+                "query": [
+                  {
+                    "key": "sort",
+                    "value": "-createdAt"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  },
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "category",
+                    "value": "categoryId"
+                  },
+                  {
+                    "key": "search",
+                    "value": "watch"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get Product By ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "productId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Create Product (Admin)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Luxury Watch",
+                    "type": "text"
+                  },
+                  {
+                    "key": "description",
+                    "value": "A premium luxury watch",
+                    "type": "text"
+                  },
+                  {
+                    "key": "price",
+                    "value": "999.99",
+                    "type": "text"
+                  },
+                  {
+                    "key": "discountPrice",
+                    "value": "899.99",
+                    "type": "text"
+                  },
+                  {
+                    "key": "category",
+                    "value": "categoryId",
+                    "type": "text"
+                  },
+                  {
+                    "key": "stock",
+                    "value": "50",
+                    "type": "text"
+                  },
+                  {
+                    "key": "featured",
+                    "value": "true",
+                    "type": "text"
+                  },
+                  {
+                    "key": "tags",
+                    "value": "[\"luxury\", \"premium\", \"watch\"]",
+                    "type": "text"
+                  },
+                  {
+                    "key": "specifications",
+                    "value": "[{\"name\": \"Material\", \"value\": \"Stainless Steel\"}, {\"name\": \"Water Resistance\", \"value\": \"100m\"}]",
+                    "type": "text"
+                  },
+                  {
+                    "key": "images",
+                    "type": "file",
+                    "src": ["/path/to/image1.jpg", "/path/to/image2.jpg"]
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/products",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products"]
+              }
+            }
+          },
+          {
+            "name": "Update Product (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Updated Luxury Watch",
+                    "type": "text"
+                  },
+                  {
+                    "key": "price",
+                    "value": "1099.99",
+                    "type": "text"
+                  },
+                  {
+                    "key": "stock",
+                    "value": "40",
+                    "type": "text"
+                  },
+                  {
+                    "key": "images",
+                    "type": "file",
+                    "src": ["/path/to/new_image.jpg"]
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "productId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Product (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "productId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Add Product Review",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"rating\": 5,\n    \"comment\": \"Excellent product, very satisfied!\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/products/:id/reviews",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", ":id", "reviews"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "productId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get Top Products",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/products/top",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", "top"]
+              }
+            }
+          },
+          {
+            "name": "Get Featured Products",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/products/featured",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "products", "featured"]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Categories",
+        "item": [
+          {
+            "name": "Get All Categories",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/categories",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories"]
+              }
+            }
+          },
+          {
+            "name": "Get All Categories (Flat)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/all",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", "all"]
+              }
+            }
+          },
+          {
+            "name": "Get Category By ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "categoryId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Create Category (Admin)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Luxury Watches",
+                    "type": "text"
+                  },
+                  {
+                    "key": "description",
+                    "value": "High-end luxury watches",
+                    "type": "text"
+                  },
+                  {
+                    "key": "parent",
+                    "value": "parentCategoryId",
+                    "type": "text",
+                    "disabled": true
+                  },
+                  {
+                    "key": "image",
+                    "type": "file",
+                    "src": "/path/to/category_image.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/categories",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories"]
+              }
+            }
+          },
+          {
+            "name": "Update Category (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Premium Luxury Watches",
+                    "type": "text"
+                  },
+                  {
+                    "key": "isActive",
+                    "value": "true",
+                    "type": "text"
+                  },
+                  {
+                    "key": "image",
+                    "type": "file",
+                    "src": "/path/to/new_category_image.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "categoryId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Category (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/categories/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "categories", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "categoryId"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Brands",
+        "item": [
+          {
+            "name": "Get All Brands",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/brands",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "brands"]
+              }
+            }
+          },
+          {
+            "name": "Get Brand By ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/brands/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "brands", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "brandId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Create Brand (Admin)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "name",
+                    "value": "Rolex",
+                    "type": "text"
+                  },
+                  {
+                    "key": "description",
+                    "value": "Luxury Swiss watchmaker",
+                    "type": "text"
+                  },
+                  {
+                    "key": "featured",
+                    "value": "true",
+                    "type": "text"
+                  },
+                  {
+                    "key": "country",
+                    "value": "Switzerland",
+                    "type": "text"
+                  },
+                  {
+                    "key": "foundedYear",
+                    "value": "1905",
+                    "type": "text"
+                  },
+                  {
+                    "key": "website",
+                    "value": "https://www.rolex.com",
+                    "type": "text"
+                  },
+                  {
+                    "key": "logo",
+                    "type": "file",
+                    "src": "/path/to/brand_logo.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/brands",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "brands"]
+              }
+            }
+          },
+          {
+            "name": "Update Brand (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "description",
+                    "value": "Updated luxury Swiss watchmaker",
+                    "type": "text"
+                  },
+                  {
+                    "key": "website",
+                    "value": "https://www.rolex.com/en-us",
+                    "type": "text"
+                  },
+                  {
+                    "key": "logo",
+                    "type": "file",
+                    "src": "/path/to/new_brand_logo.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/brands/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "brands", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "brandId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Brand (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/brands/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "brands", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "brandId"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Orders",
+        "item": [
+          {
+            "name": "Create Order",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"orderItems\": [\n        {\n            \"product\": \"productId\",\n            \"name\": \"Luxury Watch\",\n            \"image\": \"image_url\",\n            \"price\": 999.99,\n            \"quantity\": 1\n        }\n    ],\n    \"shippingAddress\": {\n        \"address\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    },\n    \"paymentMethod\": \"PayPal\",\n    \"itemsPrice\": 999.99,\n    \"taxPrice\": 100.00,\n    \"shippingPrice\": 10.00,\n    \"totalPrice\": 1109.99\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/orders",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders"]
+              }
+            }
+          },
+          {
+            "name": "Get My Orders",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/myorders",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", "myorders"]
+              }
+            }
+          },
+          {
+            "name": "Get Order By ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "orderId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update Order to Paid",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"paymentResult\": {\n        \"id\": \"paymentId\",\n        \"status\": \"completed\",\n        \"update_time\": \"2023-05-01T12:00:00Z\",\n        \"email_address\": \"customer@example.com\"\n    }\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/:id/pay",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", ":id", "pay"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "orderId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get All Orders (Admin)",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/orders?page=1&limit=10",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders"],
+                "query": [
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update Order to Delivered (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/:id/deliver",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", ":id", "deliver"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "orderId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Update Order Status (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"status\": \"processing\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/:id/status",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", ":id", "status"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "orderId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Order (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/orders/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "orders", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "orderId"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "Blogs",
+        "item": [
+          {
+            "name": "Get All Blogs",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs?sort=-createdAt&limit=10&page=1&search=watch",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs"],
+                "query": [
+                  {
+                    "key": "sort",
+                    "value": "-createdAt"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  },
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "search",
+                    "value": "watch"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get Blog By ID",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Create Blog (Admin)",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "title",
+                    "value": "The History of Luxury Watches",
+                    "type": "text"
+                  },
+                  {
+                    "key": "content",
+                    "value": "Detailed content about the history of luxury watches...",
+                    "type": "text"
+                  },
+                  {
+                    "key": "summary",
+                    "value": "A brief overview of luxury watch history",
+                    "type": "text"
+                  },
+                  {
+                    "key": "tags",
+                    "value": "[\"history\", \"luxury\", \"watches\"]",
+                    "type": "text"
+                  },
+                  {
+                    "key": "featuredImage",
+                    "type": "file",
+                    "src": "/path/to/blog_image.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs"]
+              }
+            }
+          },
+          {
+            "name": "Update Blog (Admin)",
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "formdata",
+                "formdata": [
+                  {
+                    "key": "title",
+                    "value": "Updated: The History of Luxury Watches",
+                    "type": "text"
+                  },
+                  {
+                    "key": "isPublished",
+                    "value": "true",
+                    "type": "text"
+                  },
+                  {
+                    "key": "featuredImage",
+                    "type": "file",
+                    "src": "/path/to/new_blog_image.jpg"
+                  }
+                ]
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Blog (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Add Comment to Blog",
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"content\": \"Great article! Very informative.\"\n}",
+                "options": {
+                  "raw": {
+                    "language": "json"
+                  }
+                }
+              },
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id/comments",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id", "comments"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Get Blog Comments",
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id/comments",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id", "comments"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "name": "Delete Blog Comment (Admin)",
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{baseUrl}}/api/blogs/:id/comments/:commentId",
+                "host": ["{{baseUrl}}"],
+                "path": ["api", "blogs", ":id", "comments", ":commentId"],
+                "variable": [
+                  {
+                    "key": "id",
+                    "value": "blogId"
+                  },
+                  {
+                    "key": "commentId",
+                    "value": "commentId"
+                  }
+                ]
+              }
+            }
+          }
+                ]
+              },
+              {
+                "name": "Testimonials",
+                "item": [
+                  {
+                    "name": "Get All Testimonials",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get Featured Testimonials",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials/featured",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials", "featured"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get Testimonial By ID",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "testimonialId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Create Testimonial (Admin)",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "formdata",
+                        "formdata": [
+                          {
+                            "key": "name",
+                            "value": "John Smith",
+                            "type": "text"
+                          },
+                          {
+                            "key": "position",
+                            "value": "CEO",
+                            "type": "text"
+                          },
+                          {
+                            "key": "company",
+                            "value": "Tech Solutions",
+                            "type": "text"
+                          },
+                          {
+                            "key": "content",
+                            "value": "The watch I purchased from Tornado is exceptional. The quality and craftsmanship are outstanding.",
+                            "type": "text"
+                          },
+                          {
+                            "key": "rating",
+                            "value": "5",
+                            "type": "text"
+                          },
+                          {
+                            "key": "isApproved",
+                            "value": "true",
+                            "type": "text"
+                          },
+                          {
+                            "key": "featured",
+                            "value": "true",
+                            "type": "text"
+                          },
+                          {
+                            "key": "image",
+                            "type": "file",
+                            "src": "/path/to/testimonial_image.jpg"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Update Testimonial (Admin)",
+                    "request": {
+                      "method": "PUT",
+                      "header": [],
+                      "body": {
+                        "mode": "formdata",
+                        "formdata": [
+                          {
+                            "key": "content",
+                            "value": "Updated testimonial content. The watch exceeded all my expectations!",
+                            "type": "text"
+                          },
+                          {
+                            "key": "featured",
+                            "value": "true",
+                            "type": "text"
+                          },
+                          {
+                            "key": "image",
+                            "type": "file",
+                            "src": "/path/to/new_testimonial_image.jpg"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "testimonialId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Delete Testimonial (Admin)",
+                    "request": {
+                      "method": "DELETE",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/testimonials/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "testimonials", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "testimonialId"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Contact",
+                "item": [
+                  {
+                    "name": "Submit Contact Form",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"subject\": \"Product Inquiry\",\n    \"message\": \"I'm interested in your luxury watches collection. Can you provide more information?\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/contact",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "contact"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get All Contact Messages (Admin)",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/contact?page=1&limit=10",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "contact"],
+                        "query": [
+                          {
+                            "key": "page",
+                            "value": "1"
+                          },
+                          {
+                            "key": "limit",
+                            "value": "10"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get Contact Message By ID (Admin)",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/contact/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "contact", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "contactId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Update Contact Status (Admin)",
+                    "request": {
+                      "method": "PUT",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"status\": \"resolved\",\n    \"notes\": \"Customer inquiry resolved via email\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/contact/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "contact", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "contactId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Delete Contact Message (Admin)",
+                    "request": {
+                      "method": "DELETE",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/contact/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "contact", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "contactId"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Newsletter",
+                "item": [
+                  {
+                    "name": "Subscribe to Newsletter",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"email\": \"subscriber@example.com\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/newsletter/subscribe",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "newsletter", "subscribe"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Unsubscribe from Newsletter",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/newsletter/unsubscribe/:token",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "newsletter", "unsubscribe", ":token"],
+                        "variable": [
+                          {
+                            "key": "token",
+                            "value": "unsubscribeToken"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get All Subscribers (Admin)",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/newsletter",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "newsletter"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Delete Subscriber (Admin)",
+                    "request": {
+                      "method": "DELETE",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/newsletter/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "newsletter", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "subscriberId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Send Newsletter (Admin)",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"subject\": \"New Collection Launch\",\n    \"content\": \"<h1>Introducing Our New Collection</h1><p>We are excited to announce the launch of our new luxury watch collection...</p>\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/newsletter/send",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "newsletter", "send"]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "FAQs",
+                "item": [
+                  {
+                    "name": "Get All FAQs",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/faqs",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "faqs"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get FAQ By ID",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/faqs/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "faqs", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "faqId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Create FAQ (Admin)",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"question\": \"How do I track my order?\",\n    \"answer\": \"You can track your order by logging into your account and viewing the order details.\",\n    \"category\": \"Orders\",\n    \"order\": 1\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/faqs",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "faqs"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Update FAQ (Admin)",
+                    "request": {
+                      "method": "PUT",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"answer\": \"You can track your order by logging into your account and viewing the order details. You will also receive email updates about your order status.\",\n    \"isActive\": true\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/faqs/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "faqs", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "faqId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Delete FAQ (Admin)",
+                    "request": {
+                      "method": "DELETE",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/faqs/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "faqs", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "faqId"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Warranty",
+                "item": [
+                  {
+                    "name": "Register Warranty",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "formdata",
+                        "formdata": [
+                          {
+                            "key": "productId",
+                            "value": "productId",
+                            "type": "text"
+                          },
+                          {
+                            "key": "orderId",
+                            "value": "orderId",
+                            "type": "text"
+                          },
+                          {
+                            "key": "serialNumber",
+                            "value": "WX12345678",
+                            "type": "text"
+                          },
+                          {
+                            "key": "purchaseDate",
+                            "value": "2023-05-01",
+                            "type": "text"
+                          },
+                          {
+                            "key": "proofOfPurchase",
+                            "type": "file",
+                            "src": "/path/to/receipt.pdf"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get My Warranties",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty/my",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty", "my"]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get Warranty By ID",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "warrantyId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Submit Warranty Claim",
+                    "request": {
+                      "method": "POST",
+                      "header": [],
+                      "body": {
+                        "mode": "formdata",
+                        "formdata": [
+                          {
+                            "key": "description",
+                            "value": "The watch stopped working after 2 months of use.",
+                            "type": "text"
+                          },
+                          {
+                            "key": "issueDate",
+                            "value": "2023-07-01",
+                            "type": "text"
+                          },
+                          {
+                            "key": "images",
+                            "type": "file",
+                            "src": ["/path/to/issue_image1.jpg", "/path/to/issue_image2.jpg"]
+                          }
+                        ]
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty/:id/claim",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty", ":id", "claim"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "warrantyId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Get All Warranties (Admin)",
+                    "request": {
+                      "method": "GET",
+                      "header": [],
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty?page=1&limit=10",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty"],
+                        "query": [
+                          {
+                            "key": "page",
+                            "value": "1"
+                          },
+                          {
+                            "key": "limit",
+                            "value": "10"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Update Warranty Status (Admin)",
+                    "request": {
+                      "method": "PUT",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"status\": \"approved\",\n    \"notes\": \"Warranty approved after verification\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty/:id",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty", ":id"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "warrantyId"
+                          }
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "name": "Update Warranty Claim Status (Admin)",
+                    "request": {
+                      "method": "PUT",
+                      "header": [],
+                      "body": {
+                        "mode": "raw",
+                        "raw": "{\n    \"status\": \"approved\",\n    \"resolution\": \"Replacement watch will be shipped\",\n    \"adminNotes\": \"Customer's claim is valid under warranty terms\"\n}",
+                        "options": {
+                          "raw": {
+                            "language": "json"
+                          }
+                        }
+                      },
+                      "url": {
+                        "raw": "{{baseUrl}}/api/warranty/:id/claim/:claimId",
+                        "host": ["{{baseUrl}}"],
+                        "path": ["api", "warranty", ":id", "claim", ":claimId"],
+                        "variable": [
+                          {
+                            "key": "id",
+                            "value": "warrantyId"
+                          },
+                          {
+                            "key": "claimId",
+                            "value": "claimId"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "event": [
+              {
+                "listen": "prerequest",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [""]
+                }
+              },
+              {
+                "listen": "test",
+                "script": {
+                  "type": "text/javascript",
+                  "exec": [""]
+                }
+              }
+            ],
+            "variable": [
+              {
+                "key": "baseUrl",
+                "value": "http://localhost:5000",
+                "type": "string"
+              }
+            ]
+          }
