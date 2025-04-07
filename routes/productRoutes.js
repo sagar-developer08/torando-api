@@ -11,16 +11,17 @@ const {
   createProductReview,
   getTopProducts,
   getFeaturedProducts,
-  getBestSellerProducts,  // Add this new controller
-  getNewArrivalProducts   // Add this new controller
+  getBestSellerProducts,
+  getNewArrivalProducts,
+  importProductsFromExcel
 } = require('../controllers/productController');
 
 // Public routes
 router.get('/', getProducts);
 router.get('/top', getTopProducts);
 router.get('/featured', getFeaturedProducts);
-router.get('/best-sellers', getBestSellerProducts);  // Add this new route
-router.get('/new-arrivals', getNewArrivalProducts);  // Add this new route
+router.get('/best-sellers', getBestSellerProducts);
+router.get('/new-arrivals', getNewArrivalProducts);
 router.get('/:id', getProductById);
 
 // Protected routes
@@ -34,6 +35,9 @@ router.post(
   uploadMiddleware.array('images', 5),
   createProduct
 );
+
+
+
 router.put(
   '/:id',
   protect,

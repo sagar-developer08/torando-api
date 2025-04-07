@@ -11,11 +11,20 @@ exports.createProduct = async (req, res) => {
       description, 
       price, 
       discountPrice, 
+      quantity,
       category, 
+      categoryString,
+      country,
       stock, 
       featured, 
       tags, 
-      specifications 
+      brand,
+      brandName,
+      specifications,
+      features,
+      isBestSeller,
+      isNewArrival,
+      watchDetails
     } = req.body;
 
     // Handle image uploads
@@ -28,18 +37,42 @@ exports.createProduct = async (req, res) => {
       }
     }
 
+    // Parse image links from request if provided
+    let imageLinks = {};
+    if (req.body.imageLinks) {
+      try {
+        imageLinks = JSON.parse(req.body.imageLinks);
+      } catch (error) {
+        imageLinks = req.body.imageLinks; // If already an object
+      }
+    }
+
     // Create product
     const product = await Product.create({
       name,
+      productTitle: productTitle || name,
+      sku,
+      barcode,
+      itemType,
       description,
       price,
       discountPrice,
+      quantity: quantity || stock,
       category,
+      categoryString,
+      country,
       images,
       stock,
       featured: featured || false,
-      tags: tags ? JSON.parse(tags) : [],
-      specifications: specifications ? JSON.parse(specifications) : []
+      tags: tags ? (typeof tags === 'string' ? JSON.parse(tags) : tags) : [],
+      brand,
+      brandName,
+      specifications: specifications ? (typeof specifications === 'string' ? JSON.parse(specifications) : specifications) : {},
+      features,
+      isBestSeller: isBestSeller || false,
+      isNewArrival: isNewArrival || false,
+      watchDetails: watchDetails ? (typeof watchDetails === 'string' ? JSON.parse(watchDetails) : watchDetails) : {},
+      imageLinks
     });
 
     res.status(201).json({
@@ -73,7 +106,7 @@ exports.getProducts = async (req, res) => {
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
     // Finding resource
-    let query = Product.find(JSON.parse(queryStr)).populate('category');
+    let query = Product.find(JSON.parse(queryStr)).populate('category').populate('brand').populate('watchDetails').populate('reviews');
 
     // Search functionality
     if (req.query.search) {
@@ -171,18 +204,29 @@ exports.updateProduct = async (req, res) => {
   try {
     const { 
       name, 
+      productTitle,
+      sku,
+      barcode,
+      itemType,
       description, 
       price, 
       discountPrice, 
+      quantity,
       category, 
+      categoryString,
+      country,
       stock, 
       featured, 
       tags, 
+      brand,
+      brandName,
       specifications,
-      isActive 
+      features,
+      isBestSeller,
+      isNewArrival,
+      watchDetails
     } = req.body;
 
-    // Find product
     let product = await Product.findById(req.params.id);
 
     if (!product) {
@@ -192,39 +236,77 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    // Build update object
-    const updateFields = {};
-    if (name) updateFields.name = name;
-    if (description) updateFields.description = description;
-    if (price) updateFields.price = price;
-    if (discountPrice !== undefined) updateFields.discountPrice = discountPrice;
-    if (category) updateFields.category = category;
-    if (stock !== undefined) updateFields.stock = stock;
-    if (featured !== undefined) updateFields.featured = featured;
-    if (tags) updateFields.tags = JSON.parse(tags);
-    if (specifications) updateFields.specifications = JSON.parse(specifications);
-    if (isActive !== undefined) updateFields.isActive = isActive;
-
-    // Handle image uploads if provided
+    // Handle image uploads
+    let images = [...product.images]; // Start with existing images
     if (req.files && req.files.length > 0) {
-      // Delete old images from S3
-      for (const imageUrl of product.images) {
-        await deleteFromS3(imageUrl);
-      }
-
-      // Upload new images to S3
-      const images = [];
+      // Upload each new image to S3
       for (const file of req.files) {
         const imageUrl = await uploadToS3(file, 'products');
         images.push(imageUrl);
       }
-      updateFields.images = images;
+    }
+
+    // Handle image deletions if specified
+    if (req.body.deleteImages && req.body.deleteImages.length > 0) {
+      let deleteImages = req.body.deleteImages;
+      if (typeof deleteImages === 'string') {
+        deleteImages = JSON.parse(deleteImages);
+      }
+      
+      for (const imageUrl of deleteImages) {
+        // Delete from S3
+        await deleteFromS3(imageUrl);
+        // Remove from images array
+        images = images.filter(img => img !== imageUrl);
+      }
+    }
+
+    // Parse image links from request if provided
+    let imageLinks = { ...product.imageLinks } || {};
+    if (req.body.imageLinks) {
+      try {
+        const newImageLinks = typeof req.body.imageLinks === 'string' 
+          ? JSON.parse(req.body.imageLinks) 
+          : req.body.imageLinks;
+        imageLinks = { ...imageLinks, ...newImageLinks };
+      } catch (error) {
+        console.error('Error parsing imageLinks', error);
+      }
     }
 
     // Update product
     product = await Product.findByIdAndUpdate(
       req.params.id,
-      updateFields,
+      {
+        name: name || product.name,
+        productTitle: productTitle || product.productTitle || name,
+        sku: sku || product.sku,
+        barcode: barcode || product.barcode,
+        itemType: itemType || product.itemType,
+        description: description || product.description,
+        price: price || product.price,
+        discountPrice: discountPrice !== undefined ? discountPrice : product.discountPrice,
+        quantity: quantity || product.quantity || stock,
+        category: category || product.category,
+        categoryString: categoryString || product.categoryString,
+        country: country || product.country,
+        brand: brand || product.brand,
+        brandName: brandName || product.brandName,
+        images,
+        stock: stock || product.stock,
+        featured: featured !== undefined ? featured : product.featured,
+        tags: tags ? (typeof tags === 'string' ? JSON.parse(tags) : tags) : product.tags,
+        specifications: specifications ? (typeof specifications === 'string' ? JSON.parse(specifications) : specifications) : product.specifications,
+        features: features || product.features,
+        isBestSeller: isBestSeller !== undefined ? isBestSeller : product.isBestSeller,
+        isNewArrival: isNewArrival !== undefined ? isNewArrival : product.isNewArrival,
+        watchDetails: watchDetails ? 
+          (typeof watchDetails === 'string' ? 
+            { ...product.watchDetails, ...JSON.parse(watchDetails) } : 
+            { ...product.watchDetails, ...watchDetails }) : 
+          product.watchDetails,
+        imageLinks
+      },
       { new: true, runValidators: true }
     );
 
@@ -363,8 +445,6 @@ exports.getFeaturedProducts = async (req, res) => {
     });
   }
 };
-
-// Add these methods to your existing productController.js file
 
 // @desc    Get best seller products
 // @route   GET /api/products/best-sellers

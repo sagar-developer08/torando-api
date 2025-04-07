@@ -37,13 +37,53 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  address: {
-    street: String,
-    city: String,
-    state: String,
-    zipCode: String,
-    country: String
-  },
+  addresses: [
+    {
+      name: {
+        type: String,
+        required: [true, 'Please provide an address name (e.g. Home, Work)']
+      },
+      isDefault: {
+        type: Boolean,
+        default: false
+      },
+      street: {
+        type: String,
+        required: [true, 'Please provide a street address']
+      },
+      city: {
+        type: String,
+        required: [true, 'Please provide a city']
+      },
+      state: {
+        type: String,
+        required: [true, 'Please provide a state']
+      },
+      zipCode: {
+        type: String,
+        required: [true, 'Please provide a zip code']
+      },
+      country: {
+        type: String,
+        required: [true, 'Please provide a country']
+      },
+      phoneNumber: {
+        type: String
+      }
+    }
+  ],
+  orderHistory: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order'
+    }
+  ],
+  wishlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    }
+  ],
   resetPasswordToken: String,
   resetPasswordExpire: Date
 }, {

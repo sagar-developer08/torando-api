@@ -7,6 +7,29 @@ const productSchema = new mongoose.Schema(
       required: [true, 'Product name is required'],
       trim: true
     },
+    productId: {
+      type: String,
+      // trim: true
+    },
+    productTitle: {
+      type: String,
+      required: [true, 'Product title is required'],
+      trim: true
+    },
+    sku: {
+      type: String,
+      required: [true, 'SKU is required'],
+      unique: true,
+      trim: true
+    },
+    barcode: {
+      type: String,
+      trim: true
+    },
+    itemType: {
+      type: String,
+      trim: true
+    },
     description: {
       type: String,
       required: [true, 'Product description is required']
@@ -20,21 +43,33 @@ const productSchema = new mongoose.Schema(
       type: Number,
       min: 0
     },
-    images: [
-      {
-        type: String,
-        required: true
-      }
-    ],
+    quantity: {
+      type: Number,
+      required: [true, 'Product quantity is required'],
+      min: 0,
+      default: 0
+    },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Category',
       required: true
     },
+    categoryString: {
+      type: String,
+      trim: true
+    },
+    country: {
+      type: String,
+      trim: true
+    },
     brand: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Brand',
       required: true
+    },
+    brandName: {
+      type: String,
+      trim: true
     },
     stock: {
       type: Number,
@@ -76,18 +111,36 @@ const productSchema = new mongoose.Schema(
       type: Object,
       default: {}
     },
+    features: {
+      type: String,
+      trim: true
+    },
     // Watch-specific attributes
     watchDetails: {
-      movement: {
+      targetGroup: {
         type: String,
-        enum: ['automatic', 'mechanical', 'quartz', 'solar', 'other'],
+        enum: ['Men', 'Women', 'Unisex', 'Kids'],
         required: false
       },
-      caseSize: {
-        type: Number, // in mm
+      watchType: {
+        type: String,
+        enum: ['Casual', 'Dress', 'Sport', 'Luxury', 'Smart', 'Other'],
         required: false
       },
-      caseMaterial: {
+      displayType: {
+        type: String,
+        enum: ['Analog', 'Digital', 'Analog-Digital'],
+        required: false
+      },
+      dialColor: {
+        type: String,
+        required: false
+      },
+      caseColor: {
+        type: String,
+        required: false
+      },
+      bandColor: {
         type: String,
         required: false
       },
@@ -95,11 +148,36 @@ const productSchema = new mongoose.Schema(
         type: String,
         required: false
       },
-      waterResistance: {
+      caseMaterial: {
         type: String,
         required: false
       },
-      dialColor: {
+      caseShape: {
+        type: String,
+        enum: ['Round', 'Square', 'Rectangular', 'Tonneau', 'Oval', 'Other'],
+        required: false
+      },
+      caseDiameter: {
+        type: Number, // in mm
+        required: false
+      },
+      bandClosure: {
+        type: String,
+        required: false
+      },
+      glass: {
+        type: String,
+        required: false
+      },
+      movement: {
+        type: String,
+        required: false
+      },
+      waterResistant: {
+        type: String,
+        required: false
+      },
+      warranty: {
         type: String,
         required: false
       },
@@ -113,10 +191,18 @@ const productSchema = new mongoose.Schema(
         enum: ['dress', 'casual', 'sport', 'luxury', 'vintage', 'smart'],
         required: false
       },
-      warrantyPeriod: {
-        type: Number, // in months
-        default: 12
-      }
+    },
+    // Image links from Excel sheet
+    imageLinks: {
+      image1: { type: String },
+      image2: { type: String },
+      image3: { type: String },
+      image4: { type: String },
+      image5: { type: String },
+      image6: { type: String },
+      image7: { type: String },
+      image8: { type: String },
+      image9: { type: String },
     },
     reviews: [
       {
@@ -154,6 +240,6 @@ const productSchema = new mongoose.Schema(
 );
 
 // Add text index for search
-productSchema.index({ name: 'text', description: 'text', tags: 'text' });
+productSchema.index({ name: 'text', productTitle: 'text', description: 'text', tags: 'text', sku: 'text', barcode: 'text' });
 
 module.exports = mongoose.model('Product', productSchema);
