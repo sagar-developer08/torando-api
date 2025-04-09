@@ -13,16 +13,24 @@ const {
   getFeaturedProducts,
   getBestSellerProducts,
   getNewArrivalProducts,
-  importProductsFromExcel
+  importProductsFromExcel,
+  searchProducts,
+  checkProducts
 } = require('../controllers/productController');
 
 // Public routes
+router.get('/search', searchProducts);
+
 router.get('/', getProducts);
 router.get('/top', getTopProducts);
 router.get('/featured', getFeaturedProducts);
 router.get('/best-sellers', getBestSellerProducts);
 router.get('/new-arrivals', getNewArrivalProducts);
 router.get('/:id', getProductById);
+
+// router.post('/global-search', searchProducts);
+router.get('/check', checkProducts);
+
 
 // Protected routes
 router.post('/:id/reviews', protect, createProductReview);

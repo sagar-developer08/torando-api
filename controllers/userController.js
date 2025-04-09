@@ -109,7 +109,11 @@ exports.logoutUser = asyncHandler((req, res) => {
 // @route   GET /api/users/me
 // @access  Private
 exports.getMe = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+  console.log(req.user);
+  const user = await User.findById(req.user._id).populate({
+    path: 'orderHistory',
+    model: 'Order'
+  });
 
   res.status(200).json({
     success: true,

@@ -72,7 +72,7 @@ exports.addToCart = asyncHandler(async (req, res) => {
     cart.items.push({
       product: productId,
       name: product.name,
-      image: product.images[0],
+      image: product.imageLinks.image1,
       price: product.discountPrice || product.price,
       quantity: parseInt(quantity)
     });
@@ -86,7 +86,9 @@ exports.addToCart = asyncHandler(async (req, res) => {
   }
   
   // Calculate total price
-  cart.calculateTotalPrice();
+  cart.totalPrice = cart.items.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+  }, 0);
   await cart.save();
 
   res.status(200).json({
@@ -142,7 +144,9 @@ exports.updateCartItem = asyncHandler(async (req, res) => {
   }
   
   // Recalculate total price
-  cart.calculateTotalPrice();
+  cart.totalPrice = cart.items.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+  }, 0);
   await cart.save();
 
   res.status(200).json({
@@ -175,7 +179,9 @@ exports.removeCartItem = asyncHandler(async (req, res) => {
   }
   
   // Recalculate total price
-  cart.calculateTotalPrice();
+  cart.totalPrice = cart.items.reduce((total, item) => {
+    return total + (item.price * item.quantity);
+  }, 0);
   await cart.save();
 
   res.status(200).json({

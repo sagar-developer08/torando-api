@@ -1,5 +1,6 @@
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
 
 // Add this at the top of the file with other imports
 const Cart = require('../models/cartModel');
@@ -56,6 +57,12 @@ exports.createOrder = asyncHandler(async (req, res) => {
     cart.totalPrice = 0;
     await cart.save();
 
+    // Add order to user's orderHistory
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { orderHistory: order._id } }
+    );
+
     res.status(201).json({
       success: true,
       data: order
@@ -79,6 +86,12 @@ exports.createOrder = asyncHandler(async (req, res) => {
       product.stock -= item.quantity;
       await product.save();
     }
+
+    // Add order to user's orderHistory
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { orderHistory: order._id } }
+    );
 
     res.status(201).json({
       success: true,

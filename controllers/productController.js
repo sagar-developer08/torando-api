@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Product = require('../models/productModel');
 const { uploadToS3, deleteFromS3 } = require('../config/s3');
 
@@ -520,5 +521,202 @@ exports.getNewArrivalProducts = async (req, res) => {
       success: false,
       message: error.message
     });
+  }
+};
+
+
+
+// Route: POST /api/products/search
+
+// Simple function to check if products exist in the database
+exports.checkProducts = async (req, res) => {
+  try {
+    // Count total products in the database
+    const totalProducts = await Product.countDocuments();
+    
+    // Get a sample of products (first 5)
+    const sampleProducts = await Product.find().limit(5).select('name sku productId');
+    
+    return res.status(200).json({
+      success: true,
+      totalProducts,
+      sampleProducts
+    });
+  } catch (error) {
+    console.error('Error checking products:', error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+exports.searchProducts = async (req, res) => {
+  try {
+    const { q } = req.query;
+    console.log('Search query:', q);
+
+    // First check if we have any products at all
+    const totalProducts = await Product.countDocuments();
+    console.log(`Total products in database: ${totalProducts}`);
+    
+    if (totalProducts === 0) {
+      return res.status(200).json({
+        success: true,
+        count: 0,
+        message: "No products found in the database.",
+        data: []
+      });
+    }
+
+    if (!q) {
+      return res.status(400).json({ success: false, message: "Search query is required." });
+    }
+
+    // Use a simpler approach with text search instead of regex
+    try {
+      // First try a direct search on basic fields
+      const basicSearchQuery = {
+        $or: [
+          { name: { $regex: q, $options: 'i' } },
+          { sku: { $regex: q, $options: 'i' } },
+          { productTitle: { $regex: q, $options: 'i' } },
+          { description: { $regex: q, $options: 'i' } },
+          { brandName: { $regex: q, $options: 'i' } },
+          { categoryString: { $regex: q, $options: 'i' } }
+        ]
+      };
+
+      console.log('Executing basic search query');
+      const products = await Product.find(basicSearchQuery)
+        .populate('brand category')
+        .limit(50);
+
+      if (products.length > 0) {
+        console.log(`Found ${products.length} products for basic query: ${q}`);
+        return res.status(200).json({
+          success: true,
+          count: products.length,
+          data: products
+        });
+      }
+
+      // If no results, try extended search including nested fields
+      console.log('No results found with basic search, trying extended search');
+      const extendedSearchQuery = {
+        $or: [
+          { name: { $regex: q, $options: 'i' } },
+          { sku: { $regex: q, $options: 'i' } },
+          { productTitle: { $regex: q, $options: 'i' } },
+          { description: { $regex: q, $options: 'i' } },
+          { brandName: { $regex: q, $options: 'i' } },
+          { categoryString: { $regex: q, $options: 'i' } },
+          { 'watchDetails.targetGroup': { $regex: q, $options: 'i' } },
+          { 'watchDetails.watchType': { $regex: q, $options: 'i' } },
+          { 'watchDetails.displayType': { $regex: q, $options: 'i' } },
+          { 'watchDetails.dialColor': { $regex: q, $options: 'i' } },
+          { 'watchDetails.caseColor': { $regex: q, $options: 'i' } },
+          { 'watchDetails.bandColor': { $regex: q, $options: 'i' } },
+          { 'watchDetails.bandMaterial': { $regex: q, $options: 'i' } },
+          { 'watchDetails.caseMaterial': { $regex: q, $options: 'i' } },
+          { 'watchDetails.caseShape': { $regex: q, $options: 'i' } },
+          { 'watchDetails.bandClosure': { $regex: q, $options: 'i' } },
+          { 'watchDetails.glass': { $regex: q, $options: 'i' } },
+          { 'watchDetails.movement': { $regex: q, $options: 'i' } },
+          { 'watchDetails.waterResistant': { $regex: q, $options: 'i' } },
+          { 'watchDetails.warranty': { $regex: q, $options: 'i' } },
+          { 'watchDetails.gender': { $regex: q, $options: 'i' } },
+          { 'watchDetails.style': { $regex: q, $options: 'i' } }
+        ]
+      };
+
+      // Try to find products with the extended search
+      const extendedProducts = await Product.find(extendedSearchQuery)
+        .populate('brand category')
+        .limit(50);
+
+      if (extendedProducts.length > 0) {
+        console.log(`Found ${extendedProducts.length} products for extended query: ${q}`);
+        return res.status(200).json({
+          success: true,
+          count: extendedProducts.length,
+          data: extendedProducts
+        });
+      }
+
+      // If still no results, try to search by brand and category
+      console.log('No results found with extended search, trying brand/category search');
+      const brands = await mongoose.model('Brand').find({ name: { $regex: q, $options: 'i' } }).select('_id');
+      const categories = await mongoose.model('Category').find({ name: { $regex: q, $options: 'i' } }).select('_id');
+
+      if (brands.length > 0 || categories.length > 0) {
+        const refSearchQuery = { $or: [] };
+        
+        if (brands.length > 0) {
+          const brandIds = brands.map(brand => brand._id);
+          refSearchQuery.$or.push({ brand: { $in: brandIds } });
+        }
+        
+        if (categories.length > 0) {
+          const categoryIds = categories.map(category => category._id);
+          refSearchQuery.$or.push({ category: { $in: categoryIds } });
+        }
+
+        const refProducts = await Product.find(refSearchQuery)
+          .populate('brand category')
+          .limit(50);
+
+        if (refProducts.length > 0) {
+          console.log(`Found ${refProducts.length} products via brand/category search for: ${q}`);
+          return res.status(200).json({
+            success: true,
+            count: refProducts.length,
+            data: refProducts
+          });
+        }
+      }
+
+      // If we get here, no products were found
+      console.log('No products found for any search method with query:', q);
+      return res.status(200).json({
+        success: true,
+        count: 0,
+        message: "No products found matching your search criteria.",
+        data: []
+      });
+
+    } catch (searchError) {
+      console.error('Error during search operations:', searchError);
+      // Fall back to text search as a last resort
+      try {
+        console.log('Attempting text search as fallback');
+        const textSearchProducts = await Product.find(
+          { $text: { $search: q } },
+          { score: { $meta: "textScore" } }
+        )
+        .sort({ score: { $meta: "textScore" } })
+        .populate('brand category')
+        .limit(50);
+
+        if (textSearchProducts.length > 0) {
+          console.log(`Found ${textSearchProducts.length} products via text search for: ${q}`);
+          return res.status(200).json({
+            success: true,
+            count: textSearchProducts.length,
+            data: textSearchProducts
+          });
+        } else {
+          return res.status(200).json({
+            success: true,
+            count: 0,
+            message: "No products found matching your search criteria.",
+            data: []
+          });
+        }
+      } catch (textSearchError) {
+        console.error('Text search error:', textSearchError);
+        throw textSearchError;
+      }
+    }
+  } catch (error) {
+    console.error('Search error:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
